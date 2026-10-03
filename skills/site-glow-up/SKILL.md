@@ -65,7 +65,7 @@ Run each by invoking the skill, passing the vibe read and companion list as cont
 When a phase hits a decision only the user can make (replace the animation library? is this oddity a choice?), batch the questions and ask once rather than interrupting repeatedly.
 
 ## Step 3: Personality layer (optional)
-Ask: "Want a personality layer on top? Color (richer palette), Type voice, Motion signature, Texture and detail, Copy voice, Surprise me, or skip." If yes, follow `references/personality.md`. If no, move on.
+Ask: "Want a personality layer on top? Color (richer palette), Type voice, Motion signature, Texture and detail, Copy voice, Surprise me, or skip." If yes, follow `references/personality.md`, including its signature inventory and coverage check: ask for approval of the named personality and its signature spec before building. The personality step is not done until `scripts/signature-coverage.mjs` passes on every route. If no, move on.
 
 ## Step 4: Final report
 Keep it to one screen:
@@ -74,5 +74,12 @@ Keep it to one screen:
 - Risky items (layout structure, dependencies, copy with nuance) and how to revert: `git revert <hash>` per phase
 - Things to check by eye (specific pages and breakpoints, the motion, copy that carried nuance)
 - Where the before/after screenshots are
+- **Signature coverage** (only if a personality layer added a signature): paste the table from the coverage run, never a single-page screenshot:
+
+  | Route | Count | Breaks | Visible without JS |
+  |---|---|---|---|
+  | / | 4 | 0 | yes |
+
+  One row per route in `.glow-up/signature.md`, including the 404. If any row has count 0, breaks above 0, or "no", the personality layer is not done: say so and list the fix, don't mark it complete.
 
 Don't merge `glow-up` into the main branch; the user decides.

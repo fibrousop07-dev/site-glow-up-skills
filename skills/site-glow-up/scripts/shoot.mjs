@@ -1,8 +1,16 @@
 #!/usr/bin/env node
 // Screenshot pages at 1440/768/390, scrolling through first so reveal animations finish.
 // Usage: node shoot.mjs <outDir> <url> [<url>...] [--reduced]
-// Needs playwright resolvable: in a scratch dir run `npm i playwright && npx playwright install chromium`, run this from there.
-import { chromium } from "playwright";
+// Needs playwright resolvable: in a scratch dir run `npm i playwright && npx playwright install chromium`, run it from there (it also resolves playwright from the current directory).
+let chromium;
+const pick = (m) => m.chromium ?? m.default?.chromium;
+try { chromium = pick(await import("playwright")); if (!chromium) throw 0; }
+catch {
+  // ESM resolves from this script's folder; fall back to the folder the command is run from.
+  const { createRequire } = await import("node:module"); const { pathToFileURL } = await import("node:url"); const path = await import("node:path");
+  try { chromium = pick(await import(pathToFileURL(createRequire(path.join(process.cwd(), "x.js")).resolve("playwright")).href)); if (!chromium) throw 0; }
+  catch { console.error("playwright not found. In a scratch dir run: npm i playwright && npx playwright install chromium, then run this script from that dir."); process.exit(2); }
+}
 import fs from "node:fs";
 const args = process.argv.slice(2);
 const reduced = args.includes("--reduced");
