@@ -65,7 +65,7 @@ Run each by invoking the skill, passing the vibe read and companion list as cont
 When a phase hits a decision only the user can make (replace the animation library? is this oddity a choice?), batch the questions and ask once rather than interrupting repeatedly.
 
 ## Step 3: Personality layer (optional)
-Ask: "Want a personality layer on top? Color (richer palette), Type voice, Motion signature, Texture and detail, Copy voice, Surprise me, or skip." If yes, follow `references/personality.md`, including its signature inventory and coverage check: ask for approval of the named personality and its signature spec before building. The personality step is not done until `scripts/signature-coverage.mjs` passes on every route. If no, move on.
+Ask: "Want a personality layer on top? Color (richer palette), Type voice, Motion signature, Texture and detail, Copy voice, Surprise me, or skip." If yes, follow `references/personality.md`, including its signature inventory and coverage check: ask for approval of the named personality and its signature spec before building. The personality step is not done until `scripts/signature-coverage.mjs` passes on every route and the visual review in `references/signature-review.md` has been done and shown to the user. If no, move on.
 
 ## Step 4: Final report
 Keep it to one screen:
@@ -80,6 +80,6 @@ Keep it to one screen:
   |---|---|---|---|
   | / | 4 | 0 | yes |
 
-  One row per route in `.glow-up/signature.md`, including the 404. If any row has count 0, breaks above 0, or "no", the personality layer is not done: say so and list the fix, don't mark it complete.
+  Under it, one line with the review result: six rubric scores, independent or self-reviewed, rounds taken, user decision. One row per route in `.glow-up/signature.md`, including the 404. If any row has count 0, breaks above 0, or "no", the personality layer is not done: say so and list the fix, don't mark it complete.
 
 Don't merge `glow-up` into the main branch; the user decides.

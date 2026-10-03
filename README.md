@@ -54,7 +54,7 @@ The orchestrator works on a `glow-up` git branch (or a backup folder if the proj
 ## Requirements and notes
 
 - Optional but useful: Playwright (for `site-glow-up/scripts/shoot.mjs` screenshots) or a browser tool, and Node for the batch script.
-- The personality layer writes a signature spec and must pass `site-glow-up/scripts/signature-coverage.mjs` on every route (element count, token colour, visible without JS, chain breaks, hanging shape, no overlap with text). `node scripts/selftest.mjs` checks that script itself.
+- The personality layer writes a signature spec, must pass `site-glow-up/scripts/signature-coverage.mjs` on every route (count, token colour, visible without JS, chain breaks, shape, smoothness, contrast, clearance from text/media/edges, no sideways scroll), and then gets a visual review by a fresh reviewer against a rubric (`references/signature-review.md`). `node scripts/selftest.mjs` checks the script itself (16 scenarios). Whether it is beautiful stays the user's call.
 - `argument-hint` in the frontmatter is a Claude Code feature; other skill hosts may ignore or reject it.
 - These were tested on two real static sites, and the personality layer on small Next.js fixtures (clean, and with a half-installed motif). Trigger descriptions were reviewed by hand; they were not tuned with an automated optimizer.
 
