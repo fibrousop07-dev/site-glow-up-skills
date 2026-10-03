@@ -18,6 +18,8 @@
 ## Calibration from testing
 In tests, builders who scored their own signature gave an average of 4.2. Fresh reviewers looking at the same kind of images gave 3.7 to 3.8, and a first-pass signature that passed every measurement was scored 2 on placement for reading as a stray edge line. Expect the first independent review to fail and treat that as normal: the usual causes were a strand pinned to the viewport edge and one with no visible start or end. Both are now measurable (`--min-edge`, `--ends-inside`), so run them before asking for a review.
 
+Scores also vary between reviewers looking at the same images, by about 0.3 on the average. A clean fixture went 3.8 to 3.67 after a fix round that moved the strand to the margin centre line and added a knot, because a different reviewer weighted different flaws (a kink near the foot, edge crowding at 390). When the average lands between 3.5 and 4.0, use two reviewers and take the lower average, and fix the flaws both name before spending a round on one reviewer's taste.
+
 ## Rubric
 | Criterion | 5 looks like | 1 looks like |
 |---|---|---|
