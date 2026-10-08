@@ -17,6 +17,7 @@ Use as thresholds, not laws. Deliberate rule-breaking is fine unless it hurts us
 - Columns align across sections. Centered text blocks only when short.
 
 ## Typography
+- Faces by role: h1, h2, h3, nav, buttons, labels, body and figures each use one face. A custom brand face appears wherever its job says it should, not only on the hero. Headlines in a stock face, and monospace-uppercase labels for ordinary words, are findings (see site-glow-up `references/font-audit.md`).
 - Sub-12px text (badges, tags, hints, captions) counts as a failure; grep for it first, it is the most common find on otherwise clean sites.
 - Max 2 families (1 is fine); limited weights (3 or fewer in use).
 - Body 16px or larger (18 for long reading). Line length 45-75ch (use `max-width: 65ch`). Line-height ~1.5-1.7 body, 1.1-1.3 large headings. Headings tighter tracking, small caps/uppercase wider.
@@ -54,3 +55,6 @@ Use as thresholds, not laws. Deliberate rule-breaking is fine unless it hurts us
 - Computed contrast: sample colors with the browser tool or compute from CSS variables.
 - Find overflow: in the console, list elements wider than the viewport.
 - Find spacing drift: grep for `margin|padding|gap` values and count distinct ones.
+
+## Ideas and execution
+- List the site's recurring ideas (a motif, a signature animation, a drawn typeface) and judge direction and execution separately. A good idea with a weak build is fixed, not cut. Method: site-glow-up `references/execution-gaps.md`.

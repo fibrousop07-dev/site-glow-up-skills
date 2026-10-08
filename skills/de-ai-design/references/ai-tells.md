@@ -46,6 +46,14 @@ For each: how to spot it, why it reads as AI, what to do instead. Remember: only
 
 **Default font stack** (Inter/system-ui/Poppins unmodified everywhere). Instead: pick a face for the subject: editorial serif, grotesk, mono; pair one display with one text face; tune tracking and line-height. Self-host and subset.
 
+**Brand face on one role only.** A custom or drawn typeface exists but appears on the hero and nowhere else; every other headline, title and label is a stock Google face. Detect by computing font-family per role (see the site-glow-up font audit). Instead: decide the custom face's job and apply it to every element in that job; keep it off long body copy.
+
+**Stock headline face** (Space Grotesk, Inter, Poppins, Plus Jakarta on all of h1 to h3). Reads as a template. Instead: the brand face, or a face chosen for the subject.
+
+**Monospace uppercase tracked labels** ("ONE-OFF", "MONTHLY", "STEP 02", "ILLUSTRATION") on ordinary words and boxed "pill" tags. A generic tech-site device. Instead: body face, sentence case, no box; keep mono for real code or data.
+
+**Good idea, weak build.** A concept that is right but unfinished (a thread that ends nowhere, a dimmed signature animation, a label in a default face, a demo with an opaque background hiding the motion behind it). Do not cut it; see site-glow-up `references/execution-gaps.md` and fix the build.
+
 ## 6. Motion (flag here, fix in motion-pass)
 **Fade-up-on-everything** (every block translates 20px and fades in on scroll). **Hover scale on every card** (`hover:scale-105`). **Perpetual floating/bobbing** elements. Instead: motion that follows hierarchy and purpose.
 
