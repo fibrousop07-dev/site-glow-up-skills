@@ -1,12 +1,13 @@
 # site-glow-up-skills
 
-Five [Claude Code](https://claude.com/claude-code) skills for polishing websites that are **already built**: design fundamentals, removing "AI-generated" tells, GSAP motion, and de-AI-ing the copy. One orchestrator runs the others in order, each phase on its own git commit so anything can be reverted.
+Six [Claude Code](https://claude.com/claude-code) skills for polishing websites that are **already built**: design fundamentals, removing "AI-generated" tells, hand-redrawing AI-looking artwork, GSAP motion, and de-AI-ing the copy. One orchestrator runs the others in order, each phase on its own git commit so anything can be reverted.
 
 | Skill | Use it for |
 |---|---|
-| `site-glow-up` | Full pass: vibe read, then the four skills below, then an optional personality layer |
+| `site-glow-up` | Full pass: vibe read, then the skills below, then an optional personality layer |
 | `design-theory-pass` | Hierarchy, spacing, type, contrast, responsive, accessibility, states; fixes at the token level |
 | `de-ai-design` | Purple gradients, glass, glow, three-card templates, emoji icons, stock imagery, replaced with brand-specific decisions |
+| `hand-redraw` | Scans images and illustrations for AI-looking art (glossy 3D blobs, mesh gradients, plastic renders) and redraws the offenders as hand-drawn SVG. Keeps photos, logos and scanned textures. Phase `art` |
 | `motion-pass` | A motion language, GSAP timelines and ScrollTrigger, reduced-motion support |
 | `de-ai-copy` | Finds AI-sounding copy, runs it through a **local** humanizer (127.0.0.1 only), then simplifies by hand |
 
@@ -35,7 +36,7 @@ Restart Claude Code. The skills are then available from any folder.
 ```
 /site-glow-up                          full flow on the current project
 /site-glow-up audit                    findings only, change nothing
-/site-glow-up only=design,ai           just some phases (design, ai, motion, copy)
+/site-glow-up only=design,ai           just some phases (design, ai, art, motion, copy)
 /site-glow-up skip=motion              everything except some phases
 /site-glow-up personality=color        pre-answer the personality question
 /site-glow-up resume | status          continue, or show progress
@@ -46,6 +47,10 @@ Restart Claude Code. The skills are then available from any folder.
 The focused skills take `[path|url] [audit]`, for example `/de-ai-copy audit`. You can also just describe what you want ("this site looks AI-generated, fix the design") and the right skill triggers.
 
 The orchestrator works on a `glow-up` git branch (or a backup folder if the project isn't a repo), commits after each phase, and never merges for you.
+
+## The hand-redraw skill
+
+`/hand-redraw [path|url] [audit] [style=ink|pencil|marker|crayon]` inventories every image, CSS background and inline SVG (`scripts/inventory.js`, run in the page), scores each against a catalog of AI-art tells, and redraws only the clear offenders as original SVG drawings. `scripts/roughen_svg.py` (standard-library Python, deterministic per `--seed`) adds hand-drawn wobble and paper grain, scaled to the drawing size. Photos, logos, screenshots and deliberate scanned textures (torn posters, paper, concrete) are kept; zero findings is a normal result. A hand-drawn look is an aesthetic, not proof of human authorship, and the skill says so. In a full run it is skipped unless the inventory finds `high` verdicts.
 
 ## The de-ai-copy humanizer
 

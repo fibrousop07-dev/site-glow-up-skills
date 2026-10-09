@@ -37,7 +37,7 @@ For each: how to spot it, why it reads as AI, what to do instead. Remember: only
 
 **Decorative hero illustration that isn't theirs** (cartoon vehicles, clip-art, lettering or branding of another business in the artwork). Check hero art for third-party names or logos. Instead: a real photo of the actual workshop/product/people.
 
-**Generic 3D blobs, abstract mesh gradients, stock handshake/laptop photos.** Instead: real photography of the product, place or people (ask the user), consistent treatment (crop, duotone), diagrams or screenshots that show the actual product, or purposeful typographic graphics.
+**Generic 3D blobs, abstract mesh gradients, stock handshake/laptop photos.** (Redrawing the AI-made ones by hand is the `hand-redraw` skill.) Instead: real photography of the product, place or people (ask the user), consistent treatment (crop, duotone), diagrams or screenshots that show the actual product, or purposeful typographic graphics.
 
 **Fake social proof**: invented testimonials with stock avatars, "Trusted by 10,000+", logo walls of companies that aren't customers, round-number stats. Never keep fabricated claims. Flag; replace with real quotes, real numbers, or remove.
 

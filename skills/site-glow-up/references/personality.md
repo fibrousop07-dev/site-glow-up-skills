@@ -1,6 +1,6 @@
 # Personality layer
 
-A polished site can still feel anonymous. Personality is a small set of consistent, memorable decisions. It comes after the four phases because it needs clean tokens, a settled layout, and settled copy to build on.
+A polished site can still feel anonymous. Personality is a small set of consistent, memorable decisions. It comes after the phases because it needs clean tokens, a settled layout, and settled copy to build on.
 
 ## Process
 1. **Propose a named personality** in 3-4 sentences. Name it ("Field Notes", "Night Shift Garage", "Soft Brutalist"). Say what it feels like, which two or three levers carry it, and what it deliberately is not. Ground it in the vibe read and the site's real subject, audience and brand assets, never in what is trending.

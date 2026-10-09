@@ -26,6 +26,7 @@ Full catalog with detection hints and replacements: `references/ai-tells.md`. Re
    - One consistent icon style (a single set, stroke weight, size) or real photography; remove emoji-as-icons and rounded-square icon chips.
    - Layout with a dominant element and a deliberate break in the grid instead of three equal cards.
    - Purposeful devices (rules, numbering, captions, real data, annotations, borders) instead of glow and blur.
+   - AI-looking artwork (plastic 3D blobs, mesh-gradient art, generic illustrations): don't restyle it here. Flag it for `hand-redraw`, which scans the assets and redraws the offenders by hand.
    - Characterful type chosen for the subject, with strong scale contrast.
    - Role-based radius and shadow: e.g. inputs and buttons one radius, cards another, modals a third; shadows only to show elevation.
    Avoid swapping into the next cliche (bento grids everywhere, grain on everything, all-serif editorial, brutalist-as-costume). If the replacement could belong to any other site, it is still a default.

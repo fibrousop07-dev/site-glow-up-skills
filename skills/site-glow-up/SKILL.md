@@ -1,14 +1,14 @@
 ---
 name: site-glow-up
-description: Orchestrates a full polish of an ALREADY BUILT website - design theory fixes, removing AI-generated visual tells, GSAP motion, de-AI-ing the copy, then an optional personality layer. Use this whenever the user wants to glow up, polish, level up, refresh, freshen, finish, or "make better" an existing site; says it looks AI-generated, generic, templated, bland, or soulless; wants it to feel human, premium, distinctive, or more alive; or asks for a full design/motion/copy pass over a site they already built, even if they never say "glow up". Also use to compare a local/staging build against the live deployed site (is it ready to ship, what regressed). Prefer this over the single-purpose skills when more than one of design, animation, and copy is in play.
-argument-hint: "[path|url] [audit|resume|status|revert <phase>] [compare=<live url>] [only=design,ai,motion,copy] [skip=...] [personality=color|type|motion|texture|copy|surprise]"
+description: Orchestrates a full polish of an ALREADY BUILT website - design theory fixes, removing AI-generated visual tells, hand-redrawing AI-looking artwork, GSAP motion, de-AI-ing the copy, then an optional personality layer. Use this whenever the user wants to glow up, polish, level up, refresh, freshen, finish, or "make better" an existing site; says it looks AI-generated, generic, templated, bland, or soulless; wants it to feel human, premium, distinctive, or more alive; or asks for a full design/motion/copy pass over a site they already built, even if they never say "glow up". Also use to compare a local/staging build against the live deployed site (is it ready to ship, what regressed). Prefer this over the single-purpose skills when more than one of design, animation, and copy is in play.
+argument-hint: "[path|url] [audit|resume|status|revert <phase>] [compare=<live url>] [only=design,ai,art,motion,copy] [skip=...] [personality=color|type|motion|texture|copy|surprise]"
 ---
 
 # Site Glow-Up
 
-Polish a finished site in phases, each judged against one written "vibe read", each committed separately so any phase can be reverted. The phases are separate skills that also work alone: `design-theory-pass`, `de-ai-design`, `motion-pass`, `de-ai-copy`.
+Polish a finished site in phases, each judged against one written "vibe read", each committed separately so any phase can be reverted. The phases are separate skills that also work alone: `design-theory-pass`, `de-ai-design`, `hand-redraw`, `motion-pass`, `de-ai-copy`.
 
-Why a pipeline: design fixes change tokens that the AI-tell cleanup then builds on; motion should animate the final layout; copy changes last because they change text length and can break layouts. Order matters.
+Why a pipeline: design fixes change tokens that the AI-tell cleanup then builds on; artwork is redrawn once the palette is settled; motion should animate the final layout; copy changes last because they change text length and can break layouts. Order matters.
 
 ## How to be invoked (slash command arguments)
 `/site-glow-up` takes optional arguments. Arguments received: `$ARGUMENTS`
@@ -18,8 +18,8 @@ Parse them loosely (order doesn't matter, plain words are fine):
 |---|---|
 | a folder path | the project root (otherwise use the current directory, or find the nearest package.json/index.html) |
 | a URL (`http://localhost:5173`, `https://...`) | the running site to screenshot; still edit the source, never a live site |
-| `audit` | report only: write the vibe read and a prioritized findings list from all four phases, change nothing |
-| `only=design,ai,motion,copy` | run just those phases (names: `design`=design-theory-pass, `ai`=de-ai-design, `motion`, `copy`) |
+| `audit` | report only: write the vibe read and a prioritized findings list from all phases, change nothing |
+| `only=design,ai,art,motion,copy` | run just those phases (names: `design`=design-theory-pass, `ai`=de-ai-design, `art`=hand-redraw, `motion`, `copy`) |
 | `skip=motion` | run everything except those phases |
 | `personality=color` (or type, motion, texture, copy, surprise, none) | answer the Step 3 question in advance |
 | `resume` | continue from `.glow-up/state.json`, skipping finished phases |
@@ -70,17 +70,18 @@ If this is a repeat run (earlier `run-*` folders, glow-up branches, or a vibe.md
 
 Show it to the user and wait for a yes or correction. Save the approved text to `.glow-up/vibe.md`. Every later phase quotes it when choosing between options, so a wrong read poisons everything; this is the one checkpoint worth blocking on.
 
-## Step 2: The four phases
+## Step 2: The phases
 
-Two checks cut across all four phases and are part of each phase's findings, not extra phases:
+Two checks cut across all phases and are part of each phase's findings, not extra phases:
 - **Font audit** (`references/font-audit.md`): done inside `design-theory-pass` and `de-ai-design`. Headlines in a stock face, a brand face used in one place only, and mono-uppercase labels are findings, not nitpicks.
 - **Execution gaps** (`references/execution-gaps.md`): after the design and motion phases, re-judge every idea from the vibe read. Anything still rated high direction / low execution is fixed before the final report, or listed with a reason.
 Run each by invoking the skill, passing the vibe read and companion list as context. If invoking isn't possible, read its SKILL.md and follow it.
 
 1. `design-theory-pass`, then re-screenshot into `.glow-up/after-1/`, commit.
 2. `de-ai-design`, then re-screenshot into `.glow-up/after-2/`, commit.
-3. `motion-pass`, then re-screenshot and check scroll behavior and jank, commit.
-4. `de-ai-copy`, then check text overflow and wrapping at 1440/768/390 (new text lengths break layouts), fix, commit.
+3. `hand-redraw` (phase `art`): inventory the artwork first. If no asset is a `high` AI-art verdict, skip the phase and say so (scanned textures, photos and logos are `keep`). Otherwise confirm the list with the user, redraw, re-screenshot into `.glow-up/after-3/`, commit. With `audit`, only report the verdict table.
+4. `motion-pass`, then re-screenshot and check scroll behavior and jank, commit.
+5. `de-ai-copy`, then check text overflow and wrapping at 1440/768/390 (new text lengths break layouts), fix, commit.
 
 When a phase hits a decision only the user can make (replace the animation library? is this oddity a choice?), batch the questions and ask once rather than interrupting repeatedly.
 
