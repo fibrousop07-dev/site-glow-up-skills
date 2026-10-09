@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """Give a clean SVG a hand-drawn look: wobbly edges and paper-style grain.
 
-Usage: python roughen_svg.py in.svg out.svg [--seed 1] [--style ink|pencil|marker|crayon]
+Usage: python roughen_svg.py in.svg out.svg [--seed 1] [--style ink|pencil|marker|crayon] [--echo]
+
+--echo adds a faint second outline pass, offset and wobbled differently, like a
+re-traced pen line.
 
 Deterministic: the same seed gives the same output. Standard library only.
 The drawing's background stays transparent: grain is clipped to the shapes.
 """
 import argparse
+import copy
 import os
 import random
 import xml.etree.ElementTree as ET
@@ -33,6 +37,15 @@ def drawing_size(root):
     if all(d.replace(".", "", 1).isdigit() for d in dims):
         return min(float(d) for d in dims)
     raise SystemExit("SVG needs a viewBox, or numeric width and height")
+
+
+def build_echo_filter(defs, seed, scale, freq):
+    flt = ET.SubElement(defs, f"{{{SVG}}}filter", id="hand-echo-f",
+                        x="-5%", y="-5%", width="110%", height="110%")
+    ET.SubElement(flt, f"{{{SVG}}}feTurbulence", type="fractalNoise", baseFrequency=str(freq * 1.4),
+                  numOctaves="2", seed=str(seed + 31), result="n")
+    ET.SubElement(flt, f"{{{SVG}}}feDisplacementMap", **{"in": "SourceGraphic"}, in2="n",
+                  scale=str(scale * 1.3), xChannelSelector="G", yChannelSelector="R")
 
 
 def build_filter(seed, scale, freq, grain, k):
@@ -65,6 +78,7 @@ def main():
     p.add_argument("dst")
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--style", choices=STYLES, default="ink")
+    p.add_argument("--echo", action="store_true", help="add a faint second outline pass")
     a = p.parse_args()
 
     scale, freq, grain, cap = STYLES[a.style]
@@ -91,6 +105,18 @@ def main():
                       **{"stroke-linecap": cap, "stroke-linejoin": "round"})
     for c in children:
         g.append(c)
+
+    if a.echo:
+        defs = root[0]
+        build_echo_filter(defs, a.seed, scale, freq)
+        style = ET.Element(f"{{{SVG}}}style")
+        style.text = "#hand-echo *{fill:none !important;stroke-width:1.2px !important}"
+        defs.append(style)
+        e = ET.SubElement(root, f"{{{SVG}}}g", id="hand-echo", filter="url(#hand-echo-f)",
+                          opacity="0.6", transform=f"translate({2.2 * k:.2f} {-1.8 * k:.2f})",
+                          **{"stroke-linecap": cap, "stroke-linejoin": "round"})
+        for c in children:
+            e.append(copy.deepcopy(c))
 
     os.makedirs(os.path.dirname(os.path.abspath(a.dst)), exist_ok=True)
     tree.write(a.dst, encoding="utf-8", xml_declaration=True)

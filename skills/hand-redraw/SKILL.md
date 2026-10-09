@@ -17,7 +17,9 @@ Tell catalog and style recipes: [references/tells-and-styles.md](references/tell
 ```bash
 # 1. inventory: paste scripts/inventory.js into the running page, then judge each asset
 # 2. redraw: a clean SVG in, a hand-drawn SVG out (try it on examples/wrench-clean.svg)
-python -I scripts/roughen_svg.py examples/wrench-clean.svg out/wrench.svg --seed 7 --style ink
+python -I scripts/roughen_svg.py examples/wrench-clean.svg out/wrench.svg --seed 7 --style ink --echo
+# 3. verify: fails on embedded rasters, opaque backgrounds, oversize or unroughened files
+python -I scripts/check_svg.py out/*.svg
 ```
 
 Verdict table shown to the user (step 3):
@@ -41,10 +43,10 @@ Read `.glow-up/decisions.md` and `.glow-up/vibe.md` first (obey decisions over t
 4. **Redraw.** For each item:
    - One-line subject brief ("a hand holding a wrench, 3/4 view, flat shapes").
    - Build an **SVG** from simple primitives with deliberate imperfection: open outlines, offset fills, uneven stroke width. 2-4 flat colors from the site palette. **Leave the background transparent** (the wobble ragged-edges any background rect).
-   - `python -I scripts/roughen_svg.py in.svg out.svg --seed N --style ink` adds wobble and grain; scale follows the drawing size; same seed gives same output. Use a different seed per asset.
+   - `python -I scripts/roughen_svg.py in.svg out.svg --seed N --style ink` adds wobble and grain; scale follows the drawing size; same seed gives same output. Use a different seed per asset. `--echo` adds a faint re-traced second outline; use it on line-heavy art, skip it on tiny icons.
    - Keep the aspect ratio. Save beside the original (`hero.svg` next to `hero.png`); never overwrite it.
 5. **Swap.** Update `src`/CSS/imports in the project's own way. Keep `alt`, add `width`/`height`, check dark mode.
-6. **Verify.** Render at 1x and 2x against the original, keep each under 60 KB, run the build. Squint test: one hand, one line-weight family across all assets.
+6. **Verify.** `python -I scripts/check_svg.py <redrawn files>` must exit 0 (it rejects embedded raster, opaque background, no viewBox, over 60 KB). Then render at 1x and 2x against the original, in light and dark, and run the build. Squint test: one hand, one line-weight family across all assets.
 7. **Report.** Table: asset / verdict / reason / replacement / seed. List what needs human input (real photos, logos) and what was kept as a deliberate choice.
 
 ## Rules
