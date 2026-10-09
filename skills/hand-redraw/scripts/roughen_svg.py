@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
-"""Give a clean SVG a hand-drawn look: wobbly edges, line jitter, paper grain.
+"""Give a clean SVG a hand-drawn look: wobbly edges and paper-style grain.
 
 Usage: python roughen_svg.py in.svg out.svg [--seed 1] [--style ink|pencil|marker|crayon]
 
 Deterministic: the same seed gives the same output. Standard library only.
+The drawing's background stays transparent: grain is clipped to the shapes.
 """
 import argparse
+import os
 import random
 import xml.etree.ElementTree as ET
 
 SVG = "http://www.w3.org/2000/svg"
 ET.register_namespace("", SVG)
 
-# style -> (wobble scale, wobble frequency, grain opacity, stroke-linecap)
+# style -> (wobble scale, wobble frequency, grain strength, stroke-linecap)
 # tuned for a 100-unit drawing; main() rescales to the real size
 STYLES = {
-    "ink": (3.0, 0.035, 0.10, "round"),
-    "pencil": (2.0, 0.050, 0.25, "round"),
+    "ink": (3.0, 0.035, 0.30, "round"),
+    "pencil": (2.0, 0.050, 0.60, "round"),
     "marker": (4.0, 0.025, 0.00, "round"),
-    "crayon": (5.0, 0.060, 0.30, "round"),
+    "crayon": (5.0, 0.060, 0.80, "round"),
 }
 
 
@@ -33,20 +35,27 @@ def drawing_size(root):
     raise SystemExit("SVG needs a viewBox, or numeric width and height")
 
 
-def build_defs(seed, scale, freq, grain):
-    defs = ET.Element(f"{{{SVG}}}defs")
-    wobble = ET.SubElement(defs, f"{{{SVG}}}filter", id="hand-wobble",
-                           x="-5%", y="-5%", width="110%", height="110%")
-    ET.SubElement(wobble, f"{{{SVG}}}feTurbulence", type="fractalNoise",
-                  baseFrequency=str(freq), numOctaves="2", seed=str(seed), result="n")
-    ET.SubElement(wobble, f"{{{SVG}}}feDisplacementMap", **{"in": "SourceGraphic"},
-                  in2="n", scale=str(scale), xChannelSelector="R", yChannelSelector="G")
+def build_filter(seed, scale, freq, grain, k):
+    """One filter: displace the shapes, then speckle grain inside them."""
+    f = lambda tag, **kw: ET.Element(f"{{{SVG}}}{tag}", **kw)
+    defs = f("defs")
+    flt = ET.SubElement(defs, f"{{{SVG}}}filter", id="hand-wobble",
+                        x="-5%", y="-5%", width="110%", height="110%")
+    sub = lambda tag, **kw: ET.SubElement(flt, f"{{{SVG}}}{tag}", **kw)
+    sub("feTurbulence", type="fractalNoise", baseFrequency=str(freq),
+        numOctaves="2", seed=str(seed), result="n")
+    sub("feDisplacementMap", **{"in": "SourceGraphic"}, in2="n", scale=str(scale),
+        xChannelSelector="R", yChannelSelector="G", result="d")
     if grain > 0:
-        paper = ET.SubElement(defs, f"{{{SVG}}}filter", id="hand-grain",
-                              x="0", y="0", width="100%", height="100%")
-        ET.SubElement(paper, f"{{{SVG}}}feTurbulence", type="fractalNoise",
-                      baseFrequency="0.8", numOctaves="3", seed=str(seed + 7), result="g")
-        ET.SubElement(paper, f"{{{SVG}}}feColorMatrix", type="saturate", values="0")
+        sub("feTurbulence", type="fractalNoise", baseFrequency=str(0.8 / k),
+            numOctaves="3", seed=str(seed + 7), result="g")
+        # black speckle, alpha taken from the noise, strength = grain
+        sub("feColorMatrix", **{"in": "g"}, type="matrix", result="gm",
+            values=f"0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  {grain} 0 0 0 0")
+        sub("feComposite", **{"in": "gm"}, in2="d", operator="in", result="gc")
+        merge = sub("feMerge")
+        ET.SubElement(merge, f"{{{SVG}}}feMergeNode", **{"in": "d"})
+        ET.SubElement(merge, f"{{{SVG}}}feMergeNode", **{"in": "gc"})
     return defs
 
 
@@ -66,6 +75,8 @@ def main():
     root = tree.getroot()
     if root.tag != f"{{{SVG}}}svg":
         raise SystemExit("input is not an SVG document")
+    if any(el.get("id") == "hand-wobble" for el in root.iter()):
+        raise SystemExit("already roughened: run it on the clean source SVG")
     # STYLES numbers are tuned for a 100-unit drawing; scale them to this one.
     k = drawing_size(root) / 100.0
     scale *= k
@@ -74,24 +85,14 @@ def main():
     children = list(root)
     for c in children:
         root.remove(c)
-    root.insert(0, build_defs(a.seed, scale, freq, grain))
+    root.insert(0, build_filter(a.seed, scale, freq, grain, k))
 
     g = ET.SubElement(root, f"{{{SVG}}}g", filter="url(#hand-wobble)",
                       **{"stroke-linecap": cap, "stroke-linejoin": "round"})
     for c in children:
         g.append(c)
 
-    if grain > 0:
-        vb = root.get("viewBox", "").replace(",", " ").split()
-        if len(vb) != 4:
-            w, h = (root.get(k, "").replace("px", "") for k in ("width", "height"))
-            if not (w.replace(".", "", 1).isdigit() and h.replace(".", "", 1).isdigit()):
-                raise SystemExit("SVG needs a viewBox, or numeric width and height")
-            vb = ["0", "0", w, h]
-        ET.SubElement(root, f"{{{SVG}}}rect", x=vb[0], y=vb[1], width=vb[2], height=vb[3],
-                      filter="url(#hand-grain)", opacity=str(grain),
-                      style="mix-blend-mode:multiply;pointer-events:none")
-
+    os.makedirs(os.path.dirname(os.path.abspath(a.dst)), exist_ok=True)
     tree.write(a.dst, encoding="utf-8", xml_declaration=True)
     print(f"wrote {a.dst} (style={a.style}, seed={a.seed})")
 

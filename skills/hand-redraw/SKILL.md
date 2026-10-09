@@ -12,6 +12,22 @@ Goal: every flagged image is **replaced by an original drawing of the same subje
 
 Tell catalog and style recipes: [references/tells-and-styles.md](references/tells-and-styles.md). Read it first.
 
+## Quick start
+
+```bash
+# 1. inventory: paste scripts/inventory.js into the running page, then judge each asset
+# 2. redraw: a clean SVG in, a hand-drawn SVG out (try it on examples/wrench-clean.svg)
+python -I scripts/roughen_svg.py examples/wrench-clean.svg out/wrench.svg --seed 7 --style ink
+```
+
+Verdict table shown to the user (step 3):
+
+| Asset | Verdict | Reason | Replacement |
+|---|---|---|---|
+| `/img/hero-3d.png` | high | waxy gloss, drifting symmetry, 1024x1024 | hand-drawn `hero.svg`, brief: "wrench over a loaf" |
+| `/img/team.jpg` | keep | real photo | none |
+| `/img/wall.webp` | keep | scanned paper texture, deliberate | none |
+
 ## Family conventions
 Read `.glow-up/decisions.md` and `.glow-up/vibe.md` first (obey decisions over this file). Inside a run, work on the run branch, stage only the files you touched, and commit as `glow-up: art`. Screenshots go in `.glow-up/after-3/`. Outside a run, ask before committing.
 
@@ -34,6 +50,8 @@ Read `.glow-up/decisions.md` and `.glow-up/vibe.md` first (obey decisions over t
 ## Rules
 - **Be honest.** Hand-drawn style is an aesthetic, not proof of human authorship. If the user wants it to pass a disclosure rule or contest, say it will not make AI-made work human-made, and do not strip provenance metadata from files you did not redraw.
 - Consistency beats polish: one style per site.
+- Pick line colors that contrast with the site's background in every theme (near-black ink vanishes on a dark page); use a palette ink or `currentColor`.
+- Run `roughen_svg.py` on the clean source, never on its own output (it refuses).
 - Never trace pixel-for-pixel; redraw from the brief so AI artifacts (garbled text, extra fingers) don't carry over.
 - Text inside images becomes real HTML text unless the user asks for lettering.
 - Don't fabricate photos, logos or testimonials; flag them for the user.
