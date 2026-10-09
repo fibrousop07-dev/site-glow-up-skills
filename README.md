@@ -50,7 +50,11 @@ The orchestrator works on a `glow-up` git branch (or a backup folder if the proj
 
 ## The hand-redraw skill
 
-`/hand-redraw [path|url] [audit] [style=ink|pencil|marker|crayon]` inventories every image, CSS background and inline SVG (`scripts/inventory.js`, run in the page), scores each against a catalog of AI-art tells, and redraws only the clear offenders as original SVG drawings. `scripts/roughen_svg.py` (standard-library Python, deterministic per `--seed`) adds hand-drawn wobble and paper grain clipped to the shapes, scaled to the drawing size, with an optional `--echo` re-traced second outline. `scripts/check_svg.py` verifies the result: it rejects embedded rasters (the AI art smuggled back in), opaque backgrounds, missing viewBox, files over 60 KB, scripts and external references. Photos, logos, screenshots and deliberate scanned textures (torn posters, paper, concrete) are kept; zero findings is a normal result. A hand-drawn look is an aesthetic, not proof of human authorship, and the skill says so. In a full run it is skipped unless the inventory finds `high` verdicts.
+`/hand-redraw [path|url] [audit] [style=ink|pencil|marker|crayon]` inventories every image, CSS background and inline SVG (`scripts/inventory.js`, run in the page), scores each against a catalog of AI-art tells, and redraws only the clear offenders as original SVG drawings. `scripts/roughen_svg.py` (standard-library Python, deterministic per `--seed`) adds hand-drawn wobble and paper grain clipped to the shapes, scaled to the drawing size, with an optional `--echo` re-traced second outline. `scripts/scan_assets.py` triages image files first (C2PA and prompt metadata, plus a noise-free soft-gradient signature) and only ever reports signals, never the verdict. `scripts/check_svg.py` verifies the result: it rejects embedded rasters (the AI art smuggled back in), opaque backgrounds, missing viewBox, files over 60 KB, scripts and external references. Photos, logos, screenshots and deliberate scanned textures (torn posters, paper, concrete) are kept; zero findings is a normal result. A hand-drawn look is an aesthetic, not proof of human authorship, and the skill says so. In a full run it is skipped unless the inventory finds `high` verdicts.
+
+### Tested, and what is not proven
+
+`python -I hand-redraw/tests/run_tests.py` runs 22 checks (scanner on labelled fixtures, roughener, verifier). The art phase was also taken end to end on a scratch site (inventory, scan, redraw, strict check, render, per-phase commit). Measured numbers and their limits are in `hand-redraw/tests/RESULTS.md`. The honest limits: the AI-style test images are synthetic, so recall on real model output is unmeasured; the pixel signal is a heuristic that also fits flat-shaded human art, so `review` means "look at it"; and a hand-drawn style is an aesthetic, not proof of human authorship.
 
 ## The de-ai-copy humanizer
 
@@ -58,7 +62,7 @@ The orchestrator works on a `glow-up` git branch (or a backup folder if the proj
 
 ## Requirements and notes
 
-- Optional but useful: Playwright (for `site-glow-up/scripts/shoot.mjs` screenshots) or a browser tool, and Node for the batch script.
+- Optional but useful: Playwright (for `site-glow-up/scripts/shoot.mjs` screenshots; if you already have a Chromium cached by an older Playwright, install the `playwright` npm version whose `browsers.json` revision matches it instead of downloading a new browser) or a browser tool, and Node for the batch script.
 - The personality layer writes a signature spec, must pass `site-glow-up/scripts/signature-coverage.mjs` on every route (count, token colour, visible without JS, chain breaks, shape, smoothness, contrast, clearance from text/media/edges, no sideways scroll), and then gets a visual review by a fresh reviewer against a rubric (`references/signature-review.md`). `node scripts/selftest.mjs` checks the script itself (16 scenarios). Whether it is beautiful stays the user's call.
 - `argument-hint` in the frontmatter is a Claude Code feature; other skill hosts may ignore or reject it.
 - These were tested on two real static sites, and the personality layer on small Next.js fixtures (clean, and with a half-installed motif). Trigger descriptions were reviewed by hand; they were not tuned with an automated optimizer.

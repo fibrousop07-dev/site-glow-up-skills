@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Verify redrawn SVGs before they ship.
 
-Usage: python check_svg.py file.svg [more.svg ...] [--max-kb 60]
+Usage: python check_svg.py file.svg [more.svg ...] [--max-kb 60] [--strict]
 Exit 0 when every file passes, 1 otherwise. Standard library only.
 
 Fails on: invalid XML, no viewBox, embedded raster (<image>, data:image),
@@ -61,10 +61,13 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("files", nargs="+")
     p.add_argument("--max-kb", type=float, default=60)
+    p.add_argument("--strict", action="store_true", help="treat warnings (not roughened) as failures")
     a = p.parse_args()
     bad = 0
     for f in a.files:
         fails, warns = check(f, a.max_kb)
+        if a.strict:
+            fails, warns = fails + warns, []
         status = "FAIL" if fails else "ok  "
         print(f"{status} {f}")
         for m in fails:

@@ -15,7 +15,8 @@ Tell catalog and style recipes: [references/tells-and-styles.md](references/tell
 ## Quick start
 
 ```bash
-# 1. inventory: paste scripts/inventory.js into the running page, then judge each asset
+# 1. inventory: paste scripts/inventory.js into the running page, then triage the files
+python -I scripts/scan_assets.py public/img   # signals only; you still look at every image
 # 2. redraw: a clean SVG in, a hand-drawn SVG out (try it on examples/wrench-clean.svg)
 python -I scripts/roughen_svg.py examples/wrench-clean.svg out/wrench.svg --seed 7 --style ink --echo
 # 3. verify: fails on embedded rasters, opaque backgrounds, oversize or unroughened files
@@ -36,7 +37,7 @@ Read `.glow-up/decisions.md` and `.glow-up/vibe.md` first (obey decisions over t
 ## Workflow
 
 1. **Inventory.** Run `scripts/inventory.js` in the page (browser JS tool) for `<img>`, CSS backgrounds and inline SVG, then add `/public`, `/assets` and design exports from source. Record path, size, where used.
-2. **Detect.** View every asset. Verdict: `high` (3+ tells), `maybe`, or `keep`. Metadata (`c2pa`, PNG `parameters`) is a hint only.
+2. **Detect.** Run `python -I scripts/scan_assets.py <image folders>` (metadata, C2PA, prompt chunks, noise-free-gradient signature; pixel checks need Pillow, numpy, scipy). It outputs `suspect` / `review` / `clean` signals and never decides. Then **view every asset yourself**. Verdict: `high` (3+ tells), `maybe`, or `keep`. `.svg` files are not scanned: they are already vector. Measured accuracy and its limits: `tests/RESULTS.md`.
    - **Keep by default**: real photos, logos, screenshots, charts, and **scanned or photographic textures** (torn paper, concrete, grain, collage). A deliberate texture is a design choice, not an AI tell; redrawing it destroys the look. Judge deliberateness from the vibe read.
    - Most sites yield few or zero `high` items. Zero is a valid result: say so and stop.
 3. **Confirm.** Show the verdict table (path, verdict, reason, proposed replacement). Redraw only `high` items, plus `maybe` ones the user approves.
@@ -48,6 +49,9 @@ Read `.glow-up/decisions.md` and `.glow-up/vibe.md` first (obey decisions over t
 5. **Swap.** Update `src`/CSS/imports in the project's own way. Keep `alt`, add `width`/`height`, check dark mode.
 6. **Verify.** `python -I scripts/check_svg.py <redrawn files>` must exit 0 (it rejects embedded raster, opaque background, no viewBox, over 60 KB). Then render at 1x and 2x against the original, in light and dark, and run the build. Squint test: one hand, one line-weight family across all assets.
 7. **Report.** Table: asset / verdict / reason / replacement / seed. List what needs human input (real photos, logos) and what was kept as a deliberate choice.
+
+## Self-test
+`python -I tests/run_tests.py` regenerates labelled fixtures and checks the scanner, roughener and verifier (22 checks).
 
 ## Rules
 - **Be honest.** Hand-drawn style is an aesthetic, not proof of human authorship. If the user wants it to pass a disclosure rule or contest, say it will not make AI-made work human-made, and do not strip provenance metadata from files you did not redraw.
