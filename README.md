@@ -1,6 +1,6 @@
 # site-glow-up-skills
 
-Six [Claude Code](https://claude.com/claude-code) skills for polishing websites that are **already built**: design fundamentals, removing "AI-generated" tells, hand-redrawing AI-looking artwork, GSAP motion, and de-AI-ing the copy. One orchestrator runs the others in order, each phase on its own git commit so anything can be reverted.
+Seven [Claude Code](https://claude.com/claude-code) skills for polishing websites that are **already built**: design fundamentals, removing "AI-generated" tells, hand-redrawing AI-looking artwork, GSAP motion, and de-AI-ing the copy. One orchestrator runs the others in order, each phase on its own git commit so anything can be reverted.
 
 | Skill | Use it for |
 |---|---|
@@ -8,6 +8,7 @@ Six [Claude Code](https://claude.com/claude-code) skills for polishing websites 
 | `design-theory-pass` | Hierarchy, spacing, type, contrast, responsive, accessibility, states; fixes at the token level |
 | `de-ai-design` | Purple gradients, glass, glow, three-card templates, emoji icons, stock imagery, replaced with brand-specific decisions |
 | `hand-redraw` | Scans images and illustrations for AI-looking art (glossy 3D blobs, mesh gradients, plastic renders) and redraws the offenders as hand-drawn SVG. Keeps photos, logos and scanned textures. Phase `art` |
+| `anti-ai-glowup` | Design-restraint layer: P0/P1/P2 AI-tell audit with a bundled scanner, one of eight **Aesthetic Anchors** (Swiss, Industrial, Brutalist, Aurora, Chaotic, Retro-Futuristic, Organic, Lo-Fi) with a locked 4-6 color token set, and theme cycling so projects stop converging on the same defaults |
 | `motion-pass` | A motion language, GSAP timelines and ScrollTrigger, reduced-motion support |
 | `de-ai-copy` | Finds AI-sounding copy, runs it through a **local** humanizer (127.0.0.1 only), then simplifies by hand |
 
@@ -47,6 +48,17 @@ Restart Claude Code. The skills are then available from any folder.
 The focused skills take `[path|url] [audit]`, for example `/de-ai-copy audit`. You can also just describe what you want ("this site looks AI-generated, fix the design") and the right skill triggers.
 
 The orchestrator works on a `glow-up` git branch (or a backup folder if the project isn't a repo), commits after each phase, and never merges for you.
+
+## The anti-ai-glowup skill
+
+`/anti-ai-glowup [path|url] [audit|rewrite] [anchor=swiss|industrial|brutalist|aurora|chaotic|retro|organic|lofi] [cycle=off]`
+
+1. **Audit.** `scripts/detect.mjs` (zero-dependency Node) finds code-certain tells; a render covers palette, rhythm and structure. Each finding gets an ID, location, severity (P0 layperson-visible, P1 designer-visible, P2 craft) and a code-certain / rendered / inferred tag.
+2. **Aesthetic Anchor.** Claude must pick exactly one of eight anchors (`references/anchors.md`), say why over the safe choice, name one visible differentiator, and lock 4-6 hex tokens plus 1-2 named fonts. No hybrids, no inline colors or fonts outside the token block.
+3. **Theme cycling.** `.glow-up/anchor-log.json` remembers past picks; the next project may not repeat the last two anchors or font pair, and may not retreat into second-order defaults (cream + terracotta, near-black + acid lime). See `references/theme-cycling.md`.
+4. **Rewrite.** Swaps the centered-hero-plus-three-cards skeleton for a structure that fits the anchor, keeps props, state, routing, accessibility and copy meaning, then re-scans and scores a six-axis critique.
+
+`audit` only grades and plans. In a full `/site-glow-up` run it fits after the `design` phase. Claude Code can also trigger it from plain requests like "this looks AI-generated, give it a real direction". Credits to the source skills are in `anti-ai-glowup/references/sources.md`; the scanner and tell catalog are vendored from `funboy322/avoid-ai-design` (MIT).
 
 ## The hand-redraw skill
 
