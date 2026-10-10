@@ -25,6 +25,7 @@ Parse them loosely (order doesn't matter, plain words are fine):
 | `resume` | continue from `.glow-up/state.json`, skipping finished phases |
 | `status` | print which phases are done, with commit hashes, and stop |
 | `revert <phase>` | revert that phase's commit (confirm first) and stop |
+| `anchor=swiss` (or industrial, brutalist, aurora, chaotic, retro, organic, lofi) | run the optional `anti-ai-glowup` layer after `design`: AI-tell audit, one locked Aesthetic Anchor, theme cycling. Also available alone as `/anti-ai-glowup` |
 | `fast` | skip screenshots; verify with markup/build checks only |
 | `compare=<url>` (or "compare it to the live site") | after the run (or alone, with `audit`), compare the local site against a deployed one: `references/compare.md` |
 
