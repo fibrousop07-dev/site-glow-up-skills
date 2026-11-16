@@ -35,6 +35,20 @@ Options: `--dest <dir>` (default `~/.claude/skills`), `--link` (symlink so `git 
 
 The seven glow-up skills are copied from this repo. `impeccable` and `ui-ux-pro-max` belong to other authors, so they are not bundled: the installer runs `npx skills add` against their original repos and you get their current versions. The catalog lives in `skills.json`.
 
+Prefer clicking? `node install.mjs --gui` opens a local browser installer (checkboxes, select all, live install log; binds to 127.0.0.1 only).
+
+### master-fibrous-sites installer
+
+`master-fibrous-sites` is the director for building a new site from a plain-language brief: research, concepts and palette confirmation, an asset sourcing question (AI-generated, stock, user-supplied or hand-drawn) with prompt writing, build, gate, and an optional `/site-glow-up` polish stage. It brings in `impeccable`, `design-theory-pass`, `motion-pass`, `animejs` and `gsap-*` for the build, and `site-glow-up` with its phases (including design and visual critique) for the polish.
+
+```bash
+node install-master.mjs           # interactive picker for this bundle
+node install-master.mjs --all     # the director + build skills + polish skills
+node install-master.mjs --gui     # browser installer for this bundle
+```
+
+Same options as `install.mjs`. The bundle is defined in `master-fibrous-sites.json`; `impeccable`, `ui-ux-pro-max` and `gsap-*` come from their authors' repos via `npx skills add`.
+
 Restart Claude Code afterwards.
 
 ## Use

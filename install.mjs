@@ -6,6 +6,8 @@
 //   node install.mjs --glow-up       just the 7 glow-up skills
 //   node install.mjs --only a,b      specific skill ids
 //   node install.mjs --list          show what is available and what is installed
+//   --manifest <file>   use another catalog (master-fibrous-sites.json = the master-fibrous-sites bundle)
+//   --gui               open the browser installer (see gui.mjs)
 //   Options: --dest <dir> (default ~/.claude/skills)  --link (symlink instead of copy)
 //            --dry-run  --yes (no prompts, overwrite)  --no-external (skip npx companions)
 //
@@ -20,10 +22,10 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-const manifest = JSON.parse(fs.readFileSync(path.join(root, 'skills.json'), 'utf8'));
 const args = process.argv.slice(2);
 const flag = (n) => args.includes(`--${n}`);
 const val = (n) => { const i = args.indexOf(`--${n}`); return i >= 0 ? args[i + 1] : undefined; };
+const manifest = JSON.parse(fs.readFileSync(path.resolve(root, val('manifest') || 'skills.json'), 'utf8'));
 
 const dest = path.resolve((val('dest') || path.join(os.homedir(), '.claude', 'skills')).replace(/^~/, os.homedir()));
 const dry = flag('dry-run'), yes = flag('yes'), link = flag('link');
@@ -85,6 +87,7 @@ function installNpx(s) {
 let chosen;
 if (flag('all')) chosen = all;
 else if (flag('glow-up')) chosen = all.filter((s) => s.group === 'glow-up');
+else if (flag('gui')) { const r = spawnSync(process.execPath, [path.join(root, 'gui.mjs'), '--manifest', val('manifest') || 'skills.json', ...(val('dest') ? ['--dest', val('dest')] : [])], { stdio: 'inherit' }); process.exit(r.status ?? 0); }
 else if (val('only')) {
   const ids = val('only').split(',').map((x) => x.trim());
   const bad = ids.filter((i) => !byId[i]);

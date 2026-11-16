@@ -1,0 +1,109 @@
+{
+  "name": "master-fibrous-sites",
+  "title": "Master Fibrous Sites installer",
+  "version": 1,
+  "groups": {
+    "core": "Core",
+    "build": "Build stage: design, motion, animation",
+    "polish": "Optional polish stage (site-glow-up and its phases)"
+  },
+  "skills": [
+    {
+      "id": "master-fibrous-sites",
+      "group": "core",
+      "source": "local",
+      "path": "skills/master-fibrous-sites",
+      "title": "master-fibrous-sites",
+      "desc": "The director: brief, research, concepts, confirm, asset sourcing + prompts, build, gate"
+    },
+    {
+      "id": "impeccable",
+      "group": "build",
+      "source": "npx",
+      "repo": "https://github.com/pbakaus/impeccable",
+      "title": "impeccable",
+      "desc": "Design / critique / polish suite (pbakaus/impeccable)"
+    },
+    {
+      "id": "design-theory-pass",
+      "group": "build",
+      "source": "local",
+      "path": "skills/design-theory-pass",
+      "title": "design-theory-pass",
+      "desc": "Hierarchy, spacing, type, contrast, responsive, a11y, token-level fixes"
+    },
+    {
+      "id": "motion-pass",
+      "group": "build",
+      "source": "local",
+      "path": "skills/motion-pass",
+      "title": "motion-pass",
+      "desc": "GSAP motion language, ScrollTrigger, reduced-motion support"
+    },
+    {
+      "id": "animejs",
+      "group": "build",
+      "source": "local",
+      "path": "skills/animejs",
+      "title": "animejs",
+      "desc": "Anime.js v4 motion: text, SVG, stagger, scroll-linked"
+    },
+    {
+      "id": "gsap",
+      "group": "build",
+      "source": "npx",
+      "repo": "https://github.com/greensock/gsap-skills",
+      "title": "gsap-* (8 skills)",
+      "desc": "GSAP core, timeline, ScrollTrigger, React, plugins, utils, performance (greensock)",
+      "check": "gsap-core"
+    },
+    {
+      "id": "ui-ux-pro-max",
+      "group": "build",
+      "source": "npx",
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "title": "ui-ux-pro-max",
+      "desc": "UI/UX design intelligence: styles, palettes, fonts, stacks (nextlevelbuilder)"
+    },
+    {
+      "id": "site-glow-up",
+      "group": "polish",
+      "source": "local",
+      "path": "skills/site-glow-up",
+      "title": "site-glow-up",
+      "desc": "Optional polish stage: runs every phase below plus design + visual critique"
+    },
+    {
+      "id": "de-ai-design",
+      "group": "polish",
+      "source": "local",
+      "path": "skills/de-ai-design",
+      "title": "de-ai-design",
+      "desc": "Removes AI visual tells: purple gradients, glass, glow, three-card templates"
+    },
+    {
+      "id": "anti-ai-glowup",
+      "group": "polish",
+      "source": "local",
+      "path": "skills/anti-ai-glowup",
+      "title": "anti-ai-glowup",
+      "desc": "P0/P1 AI-tell audit, Aesthetic Anchors, theme cycling"
+    },
+    {
+      "id": "hand-redraw",
+      "group": "polish",
+      "source": "local",
+      "path": "skills/hand-redraw",
+      "title": "hand-redraw",
+      "desc": "Redraws AI-looking artwork as hand-drawn SVG"
+    },
+    {
+      "id": "de-ai-copy",
+      "group": "polish",
+      "source": "local",
+      "path": "skills/de-ai-copy",
+      "title": "de-ai-copy",
+      "desc": "Finds and rewrites AI-sounding copy (local humanizer optional)"
+    }
+  ]
+}
