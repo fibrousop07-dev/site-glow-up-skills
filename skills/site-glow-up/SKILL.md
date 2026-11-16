@@ -107,3 +107,6 @@ Keep it to one screen:
   Under it, one line with the review result: six rubric scores, independent or self-reviewed, rounds taken, user decision. One row per route in `.glow-up/signature.md`, including the 404. If any row has count 0, breaks above 0, or "no", the personality layer is not done: say so and list the fix, don't mark it complete.
 
 Don't merge `glow-up` into the main branch; the user decides.
+
+## Step 5: Cleanup after approval
+Backups and run folders are temporary. When the user approves the polished version, ask once ("Keep this version? I can delete the backups and scratch files"), and on a yes delete: the `<name>-backup-<date>` copy, per-phase before/after file copies, `.glow-up/run-*` screenshots and scratch (keep `decisions.md` and `vibe.md`), and any `after-N` folders. First copy the before/after audit numbers into the final report. List what will be removed, never delete before the explicit yes, never delete anything the owner made themselves, and if the user declines leave everything in place.

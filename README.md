@@ -16,21 +16,26 @@ Each skill works on its own. The orchestrator works even if companion skills (`/
 
 ## Install
 
-Copy (or symlink) the folders in `skills/` into your user skills directory:
+Use the installer. It lets you pick what to install, or ship everything.
 
 ```bash
 git clone https://github.com/fibrousop07-dev/site-glow-up-skills
-cp -r site-glow-up-skills/skills/* ~/.claude/skills/
+cd site-glow-up-skills
+node install.mjs            # interactive picker (a = all, g = glow-up suite only)
 ```
 
-On Windows PowerShell:
-
-```powershell
-git clone https://github.com/fibrousop07-dev/site-glow-up-skills
-Copy-Item -Recurse site-glow-up-skills\skills\* $HOME\.claude\skills\
+```bash
+node install.mjs --all            # glow-up suite + impeccable + ui-ux-pro-max
+node install.mjs --glow-up        # just the 7 glow-up skills
+node install.mjs --only site-glow-up,de-ai-design,impeccable
+node install.mjs --list           # what is available / already installed
 ```
 
-Restart Claude Code. The skills are then available from any folder.
+Options: `--dest <dir>` (default `~/.claude/skills`), `--link` (symlink so `git pull` updates them), `--dry-run`, `--yes` (overwrite without asking), `--no-external`. Wrappers: `install.ps1` (Windows PowerShell) and `install.sh`. Needs Node 18+.
+
+The seven glow-up skills are copied from this repo. `impeccable` and `ui-ux-pro-max` belong to other authors, so they are not bundled: the installer runs `npx skills add` against their original repos and you get their current versions. The catalog lives in `skills.json`.
+
+Restart Claude Code afterwards.
 
 ## Use
 

@@ -1,0 +1,29 @@
+{
+  "name": "site-glow-up-skills",
+  "version": 2,
+  "groups": {
+    "glow-up": "Site glow-up suite (this repo)",
+    "companions": "Companion skills from their original authors"
+  },
+  "skills": [
+    { "id": "site-glow-up", "group": "glow-up", "source": "local", "path": "skills/site-glow-up",
+      "title": "site-glow-up", "desc": "Orchestrator: runs every phase below in order, one git commit per phase" },
+    { "id": "design-theory-pass", "group": "glow-up", "source": "local", "path": "skills/design-theory-pass",
+      "title": "design-theory-pass", "desc": "Hierarchy, spacing, type, contrast, responsive, a11y, token-level fixes" },
+    { "id": "de-ai-design", "group": "glow-up", "source": "local", "path": "skills/de-ai-design",
+      "title": "de-ai-design", "desc": "Removes AI visual tells: purple gradients, glass, glow, three-card templates" },
+    { "id": "anti-ai-glowup", "group": "glow-up", "source": "local", "path": "skills/anti-ai-glowup",
+      "title": "anti-ai-glowup", "desc": "P0/P1 AI-tell audit, Aesthetic Anchors, theme cycling" },
+    { "id": "hand-redraw", "group": "glow-up", "source": "local", "path": "skills/hand-redraw",
+      "title": "hand-redraw", "desc": "Redraws AI-looking artwork as hand-drawn SVG" },
+    { "id": "motion-pass", "group": "glow-up", "source": "local", "path": "skills/motion-pass",
+      "title": "motion-pass", "desc": "GSAP motion language, ScrollTrigger, reduced-motion support" },
+    { "id": "de-ai-copy", "group": "glow-up", "source": "local", "path": "skills/de-ai-copy",
+      "title": "de-ai-copy", "desc": "Finds and rewrites AI-sounding copy (local humanizer optional)" },
+
+    { "id": "impeccable", "group": "companions", "source": "npx", "repo": "https://github.com/pbakaus/impeccable",
+      "title": "impeccable", "desc": "Design / critique / polish suite (pbakaus/impeccable)" },
+    { "id": "ui-ux-pro-max", "group": "companions", "source": "npx", "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "title": "ui-ux-pro-max", "desc": "UI/UX design intelligence: styles, palettes, fonts, stacks (nextlevelbuilder)" }
+  ]
+}
